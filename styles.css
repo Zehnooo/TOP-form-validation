@@ -3,16 +3,27 @@
     --bg-alt: #343434;
     --text: #F8F8FF;
     --text-alt: #BEBFC5;
-    --border: #BEBFC5;
-    --btn: hsl(212, 100%, 14%, 1);
-    --btn-hov: hsl(212, 100%, 14%, .8);
+    --border: hsl(212, 100%, 14%, 1);
+    --btn-p: hsl(212, 100%, 14%, 1);
+    --btn-p-hov: hsl(212, 100%, 14%, .4);
+    --btn-s: hsl(231.43, 5.69%, 75.88%, 1);
+    --btn-s-hov: hsl(231.43, 5.69%, 75.88%, .8);
     --inp: #000000;
     --inp-hov: #343434;
     --err: #FF0800;
     --suc: #00563B;
-    --rad-sml: .4rem;
-    --rad-med: .6rem;
-    --rad-lrg: 1rem;
+    --rad-sml: .2rem;
+    --rad-med: .4rem;
+    --rad-lrg: .8rem;
+    --rad-xl: 1rem;
+    --pad-sml: .2rem;
+    --pad-med: .4rem;
+    --pad-lrg: .8rem;
+    --pad-xl: 1rem;
+    --gap-sml: .2rem;
+    --gap-med: .4rem;
+    --gap-lrg: .8rem;
+    --gap-xl: 1rem;
 }
 
 
@@ -24,6 +35,12 @@ body {
     background-repeat: no-repeat;
     margin: 0;
     color: var(--text);
+    font-family: "Noto Sans", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+            "wdth" 100;
 }
 
 header, footer {
@@ -49,7 +66,7 @@ footer {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
-
+    margin: 1rem 0;
 }
 
 #form-container {
@@ -65,15 +82,16 @@ footer {
 }
 
 form {
+    margin: auto;
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 450px;
     gap: .8rem;
-    height: 100%;
+    /* height: 100%; */
     max-height: 600px;
-    justify-content: center;
-    padding: 1rem;
+    justify-content: space-between;
+    padding: var(--pad-xl);
 }
 
 form label {
@@ -84,7 +102,7 @@ form label {
 form .field-group {
     display: flex;
     flex-direction: column;
-    gap: .2rem;
+    gap: var(--gap-med);
 }
 
 form .pw-group {
@@ -94,14 +112,33 @@ form .pw-group {
 }
 
 form input, form select {
+    max-width: 350px;
     width: 100%;
+    padding: var(--pad-med);
+    border: 2px solid transparent;
+    outline: 2px solid transparent;
+    background: var(--bg);
+    color: var(--text);
+    border-radius: var(--rad-sml);
+}
 
+form input::placeholder {
+    color: var(--text-alt);
+}
+
+form input:focus, form select:focus {
+    border: 2px solid var(--border);
+}
+
+form input:user-invalid, form select:user-invalid {
+    outline: 2px solid var(--err);
+}
+
+form input:user-valid, form select:user-valid {
+    outline: 2px solid var(--suc);
 }
 
 .pw {
-    border: 1px solid transparent;
-    border-radius: var(--rad-med);
-    display: inline-flex;
     justify-content: center;
     align-items: center;
 }
@@ -114,19 +151,57 @@ form input, form select {
 .msg {
     font-family: "Noto Sans Mono", monospace;
     font-optical-sizing: auto;
-    font-weight: 300;
+    font-weight: 500;
     font-style: normal;
     font-variation-settings:
             "wdth" 100;
-    color: var(--text-alt);
-    font-size: 12px;
+    font-size: 10px;
+    min-width: 0;
+    max-width: max-content;
+    padding: var(--pad-sml);
+    border-radius: var(--rad-sml);
 }
 
-.valid-msg {
+.msg.valid {
     background: var(--suc);
 }
 
-.invalid-msg {
-
+.msg.invalid {
     background: var(--err);
+}
+
+button {
+    border-radius: var(--rad-med);
+    display: inline-flex;
+    padding: var(--pad-med);
+    cursor: pointer;
+}
+
+button.primary {
+    background: var(--btn-p);
+    color: var(--text);
+    border: 1px solid transparent;
+}
+
+button.primary:hover {
+    background: var(--btn-p-hov);
+}
+
+button.secondary {
+    background: var(--btn-s);
+    color: var(--text);
+    border: 1px solid transparent;
+}
+
+button.secondary:hover {
+    background: var(--btn-s-hov);
+}
+
+button.create {
+    margin: 1rem auto;
+    width: 100%;
+    max-width: 200px;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--rad-lrg);
 }

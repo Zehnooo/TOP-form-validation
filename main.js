@@ -35,17 +35,23 @@
     }
 
     elements.buttons.passwordShow.innerHTML = icons.show;
-    elements.buttons.passwordShow.className = 'show-pw pw';
+    elements.buttons.passwordShow.className = 'show-pw pw secondary';
     elements.buttons.passwordShow.addEventListener( 'click', (e) => togglePasswordText(e, icons) );
 
     elements.buttons.passwordConfirmShow.innerHTML = icons.show;
-    elements.buttons.passwordConfirmShow.className = 'show-pw pw';
+    elements.buttons.passwordConfirmShow.className = 'show-pw pw secondary';
     elements.buttons.passwordConfirmShow.addEventListener( 'click', (e) => togglePasswordText(e, icons) );
 
     elements.form.addEventListener( 'submit', (e) => {
         e.preventDefault();
-        checkInputValidation(elements.inputs);
-        displayMessages(elements.messageSlots);
+        if (!elements.form.checkValidity()) {
+            checkInputValidation(elements);
+            displayMessages(elements.messageSlots);
+            return;
+        }
+
+        const data = collectFormSubmission(e);
+        console.log(data);
     });
 
     populateCountrySelect(elements.inputs.country);
@@ -60,7 +66,10 @@ const messageQueue = {
 }
 
 function populateCountrySelect(selectInput) {
-    selectInput.add(new Option('None', null, true))
+    const defaultOp = new Option('None', '', true, true);
+    defaultOp.className = 'select-default';
+    defaultOp.disabled = true;
+    selectInput.add(defaultOp);
     const countries = [
         "Afghanistan",
         "Albania",
@@ -266,8 +275,7 @@ function populateCountrySelect(selectInput) {
 
 function collectFormSubmission(event){
     const data = new FormData(event.currentTarget);
-    const values = Object.fromEntries(data.entries());
-    console.log(values);
+    return Object.fromEntries(data.entries());
 }
 
 
@@ -275,46 +283,67 @@ function togglePasswordText(event, icons){
     const btn = event.target;
     const input = btn.previousElementSibling;
     input.type === 'password' ? input.type = 'text' : input.type = 'password';
-    if (btn.className === 'show-pw pw') {
+    if (btn.className === 'show-pw pw secondary') {
         btn.innerHTML = icons.hide;
-        btn.className = 'hide-pw pw';
+        btn.className = 'hide-pw pw secondary';
     } else {
         btn.innerHTML = icons.show;
-        btn.className = 'show-pw pw';
+        btn.className = 'show-pw pw secondary';
     }
 }
 
-function checkInputValidation(inputs){
-    Object.values(inputs).forEach(input => {
+function checkInputValidation(elements){
+    const submitFlag = false;
+    Object.values(elements.inputs).forEach(input => {
         const name = input.name;
         const queue  = messageQueue[name];
-        console.log(name);
 
         if (input.validity.valueMissing) {
             if (queue.includes(input.validationMessage)) return;
             deleteFirstMsg(queue);
-            queue.push(input.validationMessage);
+            const msg = createMessage(name, input.validationMessage, 'err');
+            queue.push(msg);
         }
         else if (!input.validity.valid){
             if (queue.includes(input.validationMessage)) return;
             deleteFirstMsg(queue);
-            queue.push(input.validationMessage);
+            const msg = createMessage(name, input.validationMessage, 'err');
+            queue.push(msg);
         }
         else if (input.validity.valid) {
             queue.length = 0;
+            const slot = elements.messageSlots[name];
+            slot.textContent = '';
+            slot.className = '';
         }
     });
 }
 
 function displayMessages(messageSlots){
-    Object.entries(messageQueue).forEach(([key, val]) => {
-        console.log(key, val);
-        const slot = messageSlots[key];
-        slot.textContent = val;
-        slot.classList.add('msg');
+
+    Object.values(messageQueue).forEach(queue => {
+
+        queue.forEach(msg => {
+            const slot = messageSlots[msg.name];
+            slot.textContent = msg.text;
+            slot.classList.add('msg');
+            msg.type === 'err' ? slot.classList.add('invalid') : slot.classList.add('valid');
+        });
+
     });
+
+
 }
 
 function deleteFirstMsg(msgQueue){
     msgQueue.shift();
 }
+
+function createMessage(name, text, type) {
+    return {
+        name: name,
+        text: text,
+        type: type
+    }
+}
+
