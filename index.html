@@ -4,11 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <h1>Hello, World!</h1>
-    <script src="script.js"></script>
+<header><h1>New Account Page</h1></header>
+<div id="main">
+    <h2>Create a New Account</h2>
+    <p>Enter your details and fill out all fields to create your account!</p>
+    <form id="cust-form" novalidate>
+        <div>
+            <label for="email-input">Email</label>
+            <input type="email" id="email-input" name="email" placeholder="you@example.com" required>
+            <span id="email-msg"></span>
+        </div>
+        <div>
+            <label for="country-input">Country</label>
+            <select id="country-input" name="country" required></select>
+            <span id="country-msg"></span>
+        </div>
+        <div>
+            <label for="postal-code-input">Postal Code</label>
+            <input type="text" id="postal-code-input" name="postalCode" placeholder="Enter postal code" minLength="3" maxLength="10" required>
+            <span id="postal-code-msg"></span>
+        </div>
+        <div>
+            <label for="password-input">Password</label>
+            <input type="password" id="password-input" name="password" placeholder="Enter password" required>
+            <button id="password-show" type="button"></button>
+            <span id="password-msg"></span>
+        </div>
+        <div>
+            <label for="password-confirm-input">Confirm Password</label>
+            <input type="password" id="password-confirm-input" name="passwordConfirm" placeholder="Confirm password" required>
+            <button id="password-confirm-show" type="button"></button>
+            <span id="password-confirm-msg"></span>
+        </div>
+        <button id="create-account" type="submit">Create Account</button>
+    </form>
+</div>
+<footer><p>Zehno – The Odin Project</p></footer>
+<script src="main.js"></script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+
+.pw {
+
+}
+
+.pw svg {
+    pointer-events: none;
+    fill: black;
+}
