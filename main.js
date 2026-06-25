@@ -287,19 +287,21 @@ function togglePasswordText(event, icons){
 function checkInputValidation(inputs){
     Object.values(inputs).forEach(input => {
         const name = input.name;
+        const queue  = messageQueue[name];
         console.log(name);
-        if (input.validity.valueMissing) {
-            if (messageQueue[name].includes(input.validationMessage)) return;
-            messageQueue[name].push(input.validationMessage);
 
+        if (input.validity.valueMissing) {
+            if (queue.includes(input.validationMessage)) return;
+            deleteFirstMsg(queue);
+            queue.push(input.validationMessage);
         }
         else if (!input.validity.valid){
-            if (messageQueue[name].includes(input.validationMessage)) return;
-            messageQueue[name].push(input.validationMessage);
-            return;
+            if (queue.includes(input.validationMessage)) return;
+            deleteFirstMsg(queue);
+            queue.push(input.validationMessage);
         }
-        else {
-            return;
+        else if (input.validity.valid) {
+            queue.length = 0;
         }
     });
 }
@@ -310,4 +312,8 @@ function displayMessages(messageSlots){
         const slot = messageSlots[key];
         slot.textContent = val;
     });
+}
+
+function deleteFirstMsg(msgQueue){
+    msgQueue.shift();
 }

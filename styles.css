@@ -1,4 +1,49 @@
 
+body {
+    min-height: 100vh;
+    line-height: 1.5;
+}
+
+header, footer {
+    width: 100%;
+}
+
+footer {
+    text-align: center;
+}
+
+#main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 450px;
+    gap: .8rem;
+    height: 100%;
+    justify-content: space-evenly;
+}
+
+form .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+}
+
 .pw {
 
 }
