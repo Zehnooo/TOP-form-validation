@@ -1,7 +1,29 @@
+:root {
+    --bg: #000000;
+    --bg-alt: #343434;
+    --text: #F8F8FF;
+    --text-alt: #BEBFC5;
+    --border: #BEBFC5;
+    --btn: hsl(212, 100%, 14%, 1);
+    --btn-hov: hsl(212, 100%, 14%, .8);
+    --inp: #000000;
+    --inp-hov: #343434;
+    --err: #FF0800;
+    --suc: #00563B;
+    --rad-sml: .4rem;
+    --rad-med: .6rem;
+    --rad-lrg: 1rem;
+}
+
 
 body {
     min-height: 100vh;
     line-height: 1.5;
+    background: var(--bg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin: 0;
+    color: var(--text);
 }
 
 header, footer {
@@ -14,7 +36,7 @@ footer {
 
 #main {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -25,7 +47,21 @@ footer {
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
+
+}
+
+#form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 650px;
+    max-height: 800px;
+    background: var(--bg-alt);
+    border-radius: var(--rad-lrg);
 }
 
 form {
@@ -35,7 +71,14 @@ form {
     max-width: 450px;
     gap: .8rem;
     height: 100%;
-    justify-content: space-evenly;
+    max-height: 600px;
+    justify-content: center;
+    padding: 1rem;
+}
+
+form label {
+    color: var(--text-alt);
+    font-weight: 600;
 }
 
 form .field-group {
@@ -44,11 +87,46 @@ form .field-group {
     gap: .2rem;
 }
 
-.pw {
+form .pw-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
 
+form input, form select {
+    width: 100%;
+
+}
+
+.pw {
+    border: 1px solid transparent;
+    border-radius: var(--rad-med);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .pw svg {
     pointer-events: none;
     fill: black;
+}
+
+.msg {
+    font-family: "Noto Sans Mono", monospace;
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-style: normal;
+    font-variation-settings:
+            "wdth" 100;
+    color: var(--text-alt);
+    font-size: 12px;
+}
+
+.valid-msg {
+    background: var(--suc);
+}
+
+.invalid-msg {
+
+    background: var(--err);
 }

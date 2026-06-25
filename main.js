@@ -311,6 +311,7 @@ function displayMessages(messageSlots){
         console.log(key, val);
         const slot = messageSlots[key];
         slot.textContent = val;
+        slot.classList.add('msg');
     });
 }
 

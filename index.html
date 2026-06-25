@@ -6,6 +6,9 @@
     <title>Document</title>
     <link rel="stylesheet" href="normalize.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mono:wght@100..900&family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -14,6 +17,7 @@
     <div id="container">
     <h2>Create a New Account</h2>
     <p>Enter your details and fill out all fields to create your account!</p>
+    <div id="form-container">
     <form id="cust-form" novalidate>
         <div class="field-group">
             <label for="email-input">Email</label>
@@ -31,24 +35,25 @@
             <span id="postal-code-msg"></span>
         </div>
         <div class="field-group">
-            <div class="pw-group">
             <label for="password-input">Password</label>
+            <div class="pw-group">
             <input type="password" id="password-input" name="password" placeholder="Enter password" required>
+                <button id="password-show" type="button"></button>
             </div>
-            <button id="password-show" type="button"></button>
+
             <span id="password-msg"></span>
         </div>
         <div class="field-group">
+            <label for="password-confirm-input">Confirm Password</label>
             <div class="pw-group">
-                <label for="password-confirm-input">Confirm Password</label>
                 <input type="password" id="password-confirm-input" name="passwordConfirm" placeholder="Confirm password" required>
-
+                <button id="password-confirm-show" type="button"></button>
             </div>
-            <button id="password-confirm-show" type="button"></button>
             <span id="password-confirm-msg"></span>
         </div>
         <button id="create-account" type="submit">Create Account</button>
     </form>
+    </div>
     </div>
     <footer><p>Zehno – The Odin Project</p></footer>
 </div>
