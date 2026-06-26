@@ -2,6 +2,8 @@
 
 Live Demo [https://zehnooo.github.io/TOP-form-validation/]
 
+!-- This is not yet complete so it will look ugly and not work in all spots --!
+
 A little more practice
 Build a browser form which collects Email, Country, Postal Code, Password and Password Confirmation fields. It should use live inline validation to inform the user whether a field is properly filled in or not. That means validating as you type, not only upon form submission. When a field is invalid, it should be highlighted in red and show an error message to guide the user.
 
