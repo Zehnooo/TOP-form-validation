@@ -31,8 +31,15 @@
             passwordShow: document.querySelector('#password-show'),
             passwordConfirmShow: document.querySelector('#password-confirm-show'),
             createAccount: document.querySelector('#create-account'),
-        }
+        },
+        labels:
+            {
+                password: document.querySelector('#password-label'),
+            }
     }
+
+    elements.labels.password.addEventListener('mouseenter', (e) => {e.target.nextElementSibling.className = 'password-requirements active'});
+    elements.labels.password.addEventListener('mouseleave', (e) => {e.target.nextElementSibling.className = 'password-requirements'})
 
     elements.buttons.passwordShow.innerHTML = icons.show;
     elements.buttons.passwordShow.className = 'show-pw pw secondary';
@@ -53,7 +60,7 @@
         const data = collectFormSubmission(e);
         console.log(data);
     });
-
+    setInputListeners(elements);
     populateCountrySelect(elements.inputs.country);
 })();
 
@@ -293,30 +300,39 @@ function togglePasswordText(event, icons){
 }
 
 function checkInputValidation(elements){
-    const submitFlag = false;
     Object.values(elements.inputs).forEach(input => {
-        const name = input.name;
-        const queue  = messageQueue[name];
-
-        if (input.validity.valueMissing) {
-            if (queue.includes(input.validationMessage)) return;
-            deleteFirstMsg(queue);
-            const msg = createMessage(name, input.validationMessage, 'err');
-            queue.push(msg);
-        }
-        else if (!input.validity.valid){
-            if (queue.includes(input.validationMessage)) return;
-            deleteFirstMsg(queue);
-            const msg = createMessage(name, input.validationMessage, 'err');
-            queue.push(msg);
-        }
-        else if (input.validity.valid) {
-            queue.length = 0;
-            const slot = elements.messageSlots[name];
-            slot.textContent = '';
-            slot.className = '';
-        }
+        handleValidation(input, elements.messageSlots);
     });
+}
+
+function handleValidation(input, slots){
+
+    const name = input.name;
+    const queue  = messageQueue[name];
+    if (input.validity.valid) {
+        queue.length = 0;
+        const slot = slots[name];
+        slot.textContent = '';
+        slot.className = '';
+        console.log('hi');
+    } else if (input.validity.valueMissing) {
+        if (queue.includes(input.validationMessage)) return;
+        if (!queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+    }
+    else if (!input.validity.valid){
+        if (queue.includes(input.validationMessage)) return;
+        if (!queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+    }
+    else if (!input.validity.typeMismatch){
+        if (queue.includes(input.validationMessage)) return;
+        if (!queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+    }
 }
 
 function displayMessages(messageSlots){
@@ -347,3 +363,19 @@ function createMessage(name, text, type) {
     }
 }
 
+function setInputListeners(elements){
+    Object.values(elements.inputs).forEach(input => {
+
+        input.addEventListener('input', () => {
+            handleValidation(input, elements.messageSlots);
+            displayMessages(elements.messageSlots);
+        });
+
+        input.addEventListener('focusout', () => {
+            handleValidation(input, elements.messageSlots);
+            displayMessages(elements.messageSlots);
+        });
+
+
+    });
+}

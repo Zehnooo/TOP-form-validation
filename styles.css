@@ -3,7 +3,7 @@
     --bg-alt: #343434;
     --text: #F8F8FF;
     --text-alt: #BEBFC5;
-    --border: hsl(212, 100%, 14%, 1);
+    --border: #BEBFC5;
     --btn-p: hsl(212, 100%, 14%, 1);
     --btn-p-hov: hsl(212, 100%, 14%, .4);
     --btn-s: hsl(231.43, 5.69%, 75.88%, 1);
@@ -97,6 +97,7 @@ form {
 form label {
     color: var(--text-alt);
     font-weight: 600;
+    width: max-content;
 }
 
 form .field-group {
@@ -112,7 +113,7 @@ form .pw-group {
 }
 
 form input, form select {
-    max-width: 350px;
+    max-width: 400px;
     width: 100%;
     padding: var(--pad-med);
     border: 2px solid transparent;
@@ -136,6 +137,31 @@ form input:user-invalid, form select:user-invalid {
 
 form input:user-valid, form select:user-valid {
     outline: 2px solid var(--suc);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-requirements {
+    opacity: 0;
+    position: absolute;
+    background: var(--bg);
+    border-radius: var(--rad-med);
+    padding: var(--pad-med);
+    list-style-position: inside;
+    border: 1px solid var(--border);
+    font-size: 12px;
+}
+
+.password-requirements.active {
+    opacity: 1;
+    top: 20px;
+    left: -40px;
+}
+
+.pw-label {
+    border-bottom: 1px dashed var(--border);
 }
 
 .pw {
