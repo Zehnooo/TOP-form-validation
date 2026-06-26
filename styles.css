@@ -145,6 +145,8 @@ form input:user-valid, form select:user-valid {
 
 .password-requirements {
     opacity: 0;
+    top: 20px;
+    left: -40px;
     position: absolute;
     background: var(--bg);
     border-radius: var(--rad-med);
@@ -152,12 +154,11 @@ form input:user-valid, form select:user-valid {
     list-style-position: inside;
     border: 1px solid var(--border);
     font-size: 12px;
+    transition: opacity 0.4s ease;
 }
 
 .password-requirements.active {
     opacity: 1;
-    top: 20px;
-    left: -40px;
 }
 
 .pw-label {
