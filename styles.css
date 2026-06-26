@@ -79,6 +79,10 @@ footer {
     max-height: 800px;
     background: var(--bg-alt);
     border-radius: var(--rad-lrg);
+    box-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.2),
+            0 4px 8px rgba(0, 0, 0, 0.25),
+            0 12px 24px rgba(0, 0, 0, 0.3);
 }
 
 form {
@@ -187,14 +191,7 @@ form input:user-valid, form select:user-valid {
     max-width: max-content;
     padding: var(--pad-sml);
     border-radius: var(--rad-sml);
-}
-
-.msg.valid {
-    background: var(--suc);
-}
-
-.msg.invalid {
-    background: var(--err);
+    color: var(--text-alt);
 }
 
 button {
