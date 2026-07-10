@@ -139,14 +139,19 @@ form input::placeholder {
 }
 
 form input:focus, form select:focus {
-    border: 2px solid var(--inp-border);
+    border: 1px solid var(--inp-border);
 }
 
 form input:user-invalid, form select:user-invalid, .is-invalid {
-    outline: 1px solid var(--err);
+    outline: 2px solid var(--err);
 }
 
-form input:user-valid, form select:user-valid .is-valid {
+form input:focus.is-valid,
+form select:focus.is-valid {
+    border-color: var(--suc);
+}
+
+form input:user-valid, form select:user-valid, .is-valid {
     outline: 2px solid var(--suc);
 }
 
