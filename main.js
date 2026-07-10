@@ -62,6 +62,13 @@
             return;
         }
 
+        if (elements.inputs.password.value !== '' && elements.inputs.passwordConfirm.value !== '') {
+            const pw = elements.inputs.password.value;
+            const pwc = elements.inputs.passwordConfirm.value;
+            const check = checkPasswords(pw, pwc);
+            if (check === false) { return; }
+        }
+
         const data = collectFormSubmission(e);
         console.log(data);
     });
@@ -305,33 +312,59 @@ function togglePasswordText(event, icons){
     }
 }
 
+
+
 function handleValidation(input, slot){
 
     const name = input.name;
     const queue  = messageQueue[name];
 
     if (name === 'country' && input.value !== ''){
-        console.log(input.value === '');
-        console.log('country', input.value);
+
         queue.length = 0;
         slot.textContent = '';
-        slot.className = '';
+        slot.className = 'msg';
         updateInputClass(input, 'success');
         return;
     } else if (name === 'country' && input.value === '') {
-        console.log(input.value !== '');
-        console.log('no country', input.value);
+
         const msg = createMessage('country', 'You must select a country.', 'err');
         queue.push(msg);
         updateInputClass(input, 'error');
         return;
     }
+    if (name === 'password'){
+    const checks = validatePassword(input.value);
+    if (checks.lower === false) {
+        const msg = createMessage('password', 'Password must contain at least one lowercase letter.');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    if (checks.upper === false) {
+        const msg = createMessage('password', 'Password must contain at least one uppercase letter.');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    if (checks.num === false) {
+        const msg = createMessage('password', 'Password must contain at least one number.');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    if (checks.symbol === false) {
+        const msg = createMessage('password', 'Password must contain at least one of the allowed symbols.');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    }
 
+    if (name === 'passwordConfirm') {
+        const pw = document.querySelector('#password-input');
+    }
 
     if (input.validity.valid && name !== 'country') {
         queue.length = 0;
         slot.textContent = '';
-        slot.className = '';
+        slot.className = 'msg';
         updateInputClass(input, 'success');
     } else if (input.validity.valueMissing && name !== 'country') {
         if (queue.length) deleteFirstMsg(queue);
@@ -394,18 +427,50 @@ function setInputListeners(elements){
 }
 
 function updateInputClass(input, status){
-    console.log(status);
+
     switch(status) {
         case 'success':
 
-            if (input.classList.contains('is-invalid')) { console.log('error class found'); input.classList.remove('is-invalid'); }
+            if (input.classList.contains('is-invalid')) {input.classList.remove('is-invalid'); }
             input.classList.add('is-valid');
             break;
         case 'error':
 
-            if (input.classList.contains('is-valid')) { console.log('success class found'); input.classList.remove('is-valid'); }
+            if (input.classList.contains('is-valid')) {  input.classList.remove('is-valid'); }
             input.classList.add('is-invalid');
             break;
     }
+}
 
+function checkPasswords(pwA, pwB) {
+    return pwA === pwB;
+}
+
+const passwordRequirements = {
+    regex: {
+        lower: /[a-z+]/,
+        upper: /[A-Z+]/,
+        num: /\d/,
+        symbols: /[!"#$%&*+,-./:;?@]/,
+    },
+}
+
+function validatePassword(password) {
+    const symbols = passwordRequirements.regex.symbols;
+    const lower = passwordRequirements.regex.lower;
+    const upper = passwordRequirements.regex.upper;
+    const num = passwordRequirements.regex.num;
+
+    console.log(password);
+    /*
+    console.log(symbols);
+    console.log(regex
+
+     */
+    return {
+        lower: passwordRequirements.regex.lower.test(password),
+        upper: passwordRequirements.regex.upper.test(password),
+        num: passwordRequirements.regex.num.test(password),
+        symbol: passwordRequirements.regex.symbols.test(password)
+    }
 }

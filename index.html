@@ -15,24 +15,27 @@
 <div id="main">
     <header><h1>New Account Page</h1></header>
     <div id="container">
-    <h2>Create a New Account</h2>
-    <p>Enter your details and fill out all fields to create your account!</p>
+        <div class="greeting">
+            <h2>Create a New Account</h2>
+            <p>Enter your details and fill out all fields to create your account!</p>
+        </div>
+
     <div id="form-container">
     <form id="cust-form" novalidate>
         <div class="field-group">
             <label for="email-input">Email</label>
             <input type="email" id="email-input" name="email" placeholder="you@example.com" autocomplete="email" required>
-            <p id="email-msg"></p>
+            <p id="email-msg" class="msg"></p>
         </div>
         <div class="field-group">
             <label for="country-input">Country</label>
             <select id="country-input" name="country" required></select>
-            <p id="country-msg"></p>
+            <p id="country-msg" class="msg"></p>
         </div>
         <div class="field-group">
             <label for="postal-code-input">Postal Code</label>
             <input type="text" id="postal-code-input" name="postalCode" placeholder="Enter postal code" minLength="3" maxLength="10" required>
-            <p id="postal-code-msg"></p>
+            <p id="postal-code-msg" class="msg"></p>
         </div>
         <div class="field-group">
             <div class="password-container">
@@ -43,7 +46,7 @@
                 <li>At least one capital letter</li>
                 <li>At least one lowercase letter</li>
                 <li>At least one number</li>
-                <li>At least one special character [! " # $ % & * + , - . / : ; ? @]</li>
+                <li>At least one special character ! " # $ % & * + , - . / : ; ? @</li>
             </ul>
             </div>
             <div class="pw-group">
@@ -51,7 +54,7 @@
                 <button id="password-show" type="button"></button>
             </div>
 
-            <p id="password-msg"></p>
+            <p id="password-msg" class="msg"></p>
         </div>
         <div class="field-group">
             <label for="password-confirm-input">Confirm Password</label>
@@ -59,7 +62,7 @@
                 <input type="password" id="password-confirm-input" name="passwordConfirm" placeholder="Confirm password" autocomplete="new-password" minLength="5" maxLength="26" required>
                 <button id="password-confirm-show" type="button"></button>
             </div>
-            <p id="password-confirm-msg"></p>
+            <p id="password-confirm-msg" class="msg"></p>
         </div>
         <button id="create-account" type="submit" class="create primary">Create Account</button>
     </form>
