@@ -190,7 +190,7 @@ form input:hover, form select:hover {
 
 .password-requirements {
     opacity: 0;
-    top: 0px;
+    top: 0;
     left: 5rem;
     position: absolute;
     background: var(--bg);
