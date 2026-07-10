@@ -31,8 +31,15 @@
             passwordShow: document.querySelector('#password-show'),
             passwordConfirmShow: document.querySelector('#password-confirm-show'),
             createAccount: document.querySelector('#create-account'),
-        }
+        },
+        labels:
+            {
+                password: document.querySelector('#password-label'),
+            }
     }
+
+    elements.labels.password.addEventListener('mouseenter', (e) => {e.target.nextElementSibling.className = 'password-requirements active'});
+    elements.labels.password.addEventListener('mouseleave', (e) => {e.target.nextElementSibling.className = 'password-requirements'})
 
     elements.buttons.passwordShow.innerHTML = icons.show;
     elements.buttons.passwordShow.className = 'show-pw pw secondary';
@@ -51,8 +58,7 @@
                 const name = input.name;
                 const queue  = messageQueue[name];
                 const slot = elements.messageSlots[name];
-                console.log('Check', {name, queue, slot})
-                checkInputValidation(input, name, queue, slot);
+                handleValidation(input, slot)
             });
             displayMessages(elements.messageSlots);
             return;
@@ -62,6 +68,7 @@
         console.log(data);
     });
 
+    /*
     Object.values(elements.inputs).forEach(input => {
         const el = input;
         el.addEventListener('input', (e) => {
@@ -74,8 +81,10 @@
             displayMessages(elements.messageSlots);
         });
     });
+    */
 
-
+    setInputListeners(elements);
+    populateCountrySelect(elements.inputs.country);
 })();
 
 const messageQueue = {
@@ -334,11 +343,59 @@ function checkInputValidation(input, name, queue, slot){
         console.log(JSON.stringify({input, name, queue, slot}, null, 1));
 }
 
+function handleValidation(input, slot){
+
+    const name = input.name;
+    const queue  = messageQueue[name];
+
+    if (name === 'country' && input.value === '') {
+        console.log(!input.value);
+        console.log('no country', input.value);
+        const msg = createMessage('country', 'You must select a country.', 'error');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+
+    if (name === 'country' && input.value !== ''){
+        console.log(input.value);
+        console.log('country', input.value);
+        queue.length = 0;
+        slot.textContent = '';
+        slot.className = '';
+        updateInputClass(input, 'success');
+    }
+
+    if (input.validity.valid && name !== 'country') {
+        queue.length = 0;
+        slot.textContent = '';
+        slot.className = '';
+        updateInputClass(input, 'success');
+    } else if (input.validity.valueMissing) {
+        if (queue.includes(input.validationMessage)) return;
+        if (queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    else if (!input.validity.valid){
+        if (queue.includes(input.validationMessage)) return;
+        if (!queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+    else if (!input.validity.typeMismatch){
+        if (queue.includes(input.validationMessage)) return;
+        if (!queue.length) deleteFirstMsg(queue);
+        const msg = createMessage(name, input.validationMessage, 'err');
+        queue.push(msg);
+        updateInputClass(input, 'error');
+    }
+}
+
 function displayMessages(messageSlots){
-    console.log('Available slots', messageSlots);
     Object.values(messageQueue).forEach(queue => {
         queue.forEach(msg => {
-            console.log('Message', msg);
             const slot = messageSlots[msg.name];
             slot.textContent = msg.text;
             slot.classList.add('msg');
@@ -359,3 +416,34 @@ function createMessage(name, text, type) {
     }
 }
 
+function setInputListeners(elements){
+    Object.values(elements.inputs).forEach(input => {
+
+        input.addEventListener('input', () => {
+            handleValidation(input, elements.messageSlots);
+            displayMessages(elements.messageSlots);
+        });
+
+        input.addEventListener('focusout', () => {
+            handleValidation(input, elements.messageSlots);
+            displayMessages(elements.messageSlots);
+        });
+
+
+    });
+}
+
+function updateInputClass(input, status){
+    switch(status) {
+        case 'success':
+            console.log('success');
+            if (input.classList.contains('is-invalid')) { console.log('error class found'); input.classList.remove('is-invalid'); }
+            input.classList.add('is-valid');
+            break;
+        case 'error':
+            console.log('error');
+            if (input.classList.contains('is-valid')) { console.log('success class found'); input.classList.remove('is-valid'); }
+            input.classList.add('is-invalid');
+    }
+
+}
