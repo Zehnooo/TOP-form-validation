@@ -124,7 +124,7 @@ form .pw-group {
 }
 
 form input, form select {
-    max-width: 350px;
+    max-width: 400px;
     width: 100%;
     padding: var(--pad-med);
     border: 2px solid transparent;
@@ -142,16 +142,49 @@ form input:focus, form select:focus {
     border: 2px solid var(--inp-border);
 }
 
-form input:user-invalid, form select:user-invalid {
-    outline: 2px solid var(--err);
+form input:user-invalid, form select:user-invalid, .is-invalid {
+    outline: 1px solid var(--err);
 }
 
-form input:user-valid, form select:user-valid {
+form input:user-valid, form select:user-valid .is-valid {
     outline: 2px solid var(--suc);
 }
 
 form input:hover, form select:hover {
     background: var(--inp-hov);
+}
+
+.password-container {
+    position: relative;
+}
+
+.password-requirements {
+    opacity: 0;
+    top: 20px;
+    left: -40px;
+    position: absolute;
+    background: var(--bg);
+    border-radius: var(--rad-med);
+    padding: var(--pad-med);
+    list-style-position: inside;
+    border: 1px solid var(--border);
+    font-size: 12px;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    display: none;
+}
+
+.password-requirements.active {
+    opacity: 1;
+    display: block;
+}
+
+.pw-label {
+    border-bottom: 1px dashed var(--inp-border);
+}
+
+.pw-req-label {
+    color: var(--text-alt);
 }
 
 .pw {
@@ -176,14 +209,7 @@ form input:hover, form select:hover {
     max-width: max-content;
     padding: var(--pad-sml);
     border-radius: var(--rad-sml);
-}
-
-.msg.valid {
-    background: var(--suc);
-}
-
-.msg.invalid {
-    background: var(--err);
+    color: var(--text-alt);
 }
 
 button {
