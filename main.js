@@ -54,7 +54,7 @@
         if (!elements.form.checkValidity()) {
             Object.values(elements.inputs).forEach(input => {
                 const name = input.name;
-                const queue  = messageQueue[name];
+
                 const slot = elements.messageSlots[name];
                 handleValidation(input, slot)
             });
@@ -65,21 +65,6 @@
         const data = collectFormSubmission(e);
         console.log(data);
     });
-
-    /*
-    Object.values(elements.inputs).forEach(input => {
-        const el = input;
-        el.addEventListener('input', (e) => {
-            e.preventDefault();
-            console.log({input, value: e.target.value});
-            const name = el.name;
-            const queue  = messageQueue[name];
-            const slot = elements.messageSlots[name];
-            checkInputValidation(el, name, queue, slot);
-            displayMessages(elements.messageSlots);
-        });
-    });
-    */
 
     setInputListeners(elements);
     populateCountrySelect(elements.inputs.country);
