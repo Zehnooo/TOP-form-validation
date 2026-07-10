@@ -42,10 +42,18 @@
     elements.buttons.passwordConfirmShow.className = 'show-pw pw secondary';
     elements.buttons.passwordConfirmShow.addEventListener( 'click', (e) => togglePasswordText(e, icons) );
 
+    populateCountrySelect(elements.inputs.country);
+
     elements.form.addEventListener( 'submit', (e) => {
         e.preventDefault();
         if (!elements.form.checkValidity()) {
-            checkInputValidation(elements);
+            Object.values(elements.inputs).forEach(input => {
+                const name = input.name;
+                const queue  = messageQueue[name];
+                const slot = elements.messageSlots[name];
+                console.log('Check', {name, queue, slot})
+                checkInputValidation(input, name, queue, slot);
+            });
             displayMessages(elements.messageSlots);
             return;
         }
@@ -54,7 +62,20 @@
         console.log(data);
     });
 
-    populateCountrySelect(elements.inputs.country);
+    Object.values(elements.inputs).forEach(input => {
+        const el = input;
+        el.addEventListener('input', (e) => {
+            e.preventDefault();
+            console.log({input, value: e.target.value});
+            const name = el.name;
+            const queue  = messageQueue[name];
+            const slot = elements.messageSlots[name];
+            checkInputValidation(el, name, queue, slot);
+            displayMessages(elements.messageSlots);
+        });
+    });
+
+
 })();
 
 const messageQueue = {
@@ -292,47 +313,38 @@ function togglePasswordText(event, icons){
     }
 }
 
-function checkInputValidation(elements){
-    const submitFlag = false;
-    Object.values(elements.inputs).forEach(input => {
-        const name = input.name;
-        const queue  = messageQueue[name];
-
+function checkInputValidation(input, name, queue, slot){
         if (input.validity.valueMissing) {
             if (queue.includes(input.validationMessage)) return;
-            deleteFirstMsg(queue);
+            if (queue.length > 0) deleteFirstMsg(queue);
             const msg = createMessage(name, input.validationMessage, 'err');
             queue.push(msg);
         }
         else if (!input.validity.valid){
             if (queue.includes(input.validationMessage)) return;
-            deleteFirstMsg(queue);
+            if (queue.length > 0) deleteFirstMsg(queue);
             const msg = createMessage(name, input.validationMessage, 'err');
             queue.push(msg);
         }
         else if (input.validity.valid) {
             queue.length = 0;
-            const slot = elements.messageSlots[name];
             slot.textContent = '';
             slot.className = '';
         }
-    });
+        console.log(JSON.stringify({input, name, queue, slot}, null, 1));
 }
 
 function displayMessages(messageSlots){
-
+    console.log('Available slots', messageSlots);
     Object.values(messageQueue).forEach(queue => {
-
         queue.forEach(msg => {
+            console.log('Message', msg);
             const slot = messageSlots[msg.name];
             slot.textContent = msg.text;
             slot.classList.add('msg');
             msg.type === 'err' ? slot.classList.add('invalid') : slot.classList.add('valid');
         });
-
     });
-
-
 }
 
 function deleteFirstMsg(msgQueue){
