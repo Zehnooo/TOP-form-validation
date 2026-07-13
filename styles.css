@@ -260,6 +260,11 @@ form input:hover, form select:hover {
     opacity: 1;
 }
 
+.msg.valid {
+    color: var(--suc);
+    opacity: 1;
+}
+
 button {
     border-radius: var(--rad-sml);
     display: inline-flex;

@@ -25,17 +25,17 @@
         <div class="field-group">
             <label for="email-input">Email</label>
             <input type="email" id="email-input" name="email" placeholder="you@example.com" autocomplete="email" required>
-            <p id="email-msg" class="msg"></p>
+            <div id="email-msg" ></div>
         </div>
         <div class="field-group">
             <label for="country-input">Country</label>
             <select id="country-input" name="country" required></select>
-            <p id="country-msg" class="msg"></p>
+            <div id="country-msg" ></div>
         </div>
         <div class="field-group">
             <label for="postal-code-input">Postal Code</label>
             <input type="text" id="postal-code-input" name="postalCode" placeholder="Enter postal code" minLength="3" maxLength="10" required>
-            <p id="postal-code-msg" class="msg"></p>
+            <div id="postal-code-msg" ></div>
         </div>
         <div class="field-group">
             <div class="password-container">
@@ -54,7 +54,7 @@
                 <button id="password-show" type="button"></button>
             </div>
 
-            <p id="password-msg" class="msg"></p>
+            <div id="password-msg" ></div>
         </div>
         <div class="field-group">
             <label for="password-confirm-input">Confirm Password</label>
@@ -62,7 +62,7 @@
                 <input type="password" id="password-confirm-input" name="passwordConfirm" placeholder="Confirm password" autocomplete="new-password" minLength="5" maxLength="26" required>
                 <button id="password-confirm-show" type="button"></button>
             </div>
-            <p id="password-confirm-msg" class="msg"></p>
+            <div id="password-confirm-msg" ></div>
         </div>
         <button id="create-account" type="submit" class="create primary">Create Account</button>
     </form>

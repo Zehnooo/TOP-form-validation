@@ -58,7 +58,7 @@
                 const slot = elements.messageSlots[name];
                 handleValidation(input, slot)
             });
-            displayMessages(elements.messageSlots);
+            displayAllSubmissionMessages(elements.messageSlots);
             return;
         }
 
@@ -320,82 +320,126 @@ function handleValidation(input, slot){
     const queue  = messageQueue[name];
 
     if (name === 'country' && input.value !== ''){
-
         queue.length = 0;
-        slot.textContent = '';
-        slot.className = 'msg';
+        slot.replaceChildren();
         updateInputClass(input, 'success');
         return;
     } else if (name === 'country' && input.value === '') {
 
         const msg = createMessage('country', 'You must select a country.', 'err');
-        queue.push(msg);
+        checkQueue(queue, msg);
         updateInputClass(input, 'error');
         return;
     }
     if (name === 'password'){
-    const checks = validatePassword(input.value);
-    if (checks.lower === false) {
-        const msg = createMessage('password', 'Password must contain at least one lowercase letter.');
-        queue.push(msg);
-        updateInputClass(input, 'error');
-    }
-    if (checks.upper === false) {
-        const msg = createMessage('password', 'Password must contain at least one uppercase letter.');
-        queue.push(msg);
-        updateInputClass(input, 'error');
-    }
-    if (checks.num === false) {
-        const msg = createMessage('password', 'Password must contain at least one number.');
-        queue.push(msg);
-        updateInputClass(input, 'error');
-    }
-    if (checks.symbol === false) {
-        const msg = createMessage('password', 'Password must contain at least one of the allowed symbols.');
-        queue.push(msg);
-        updateInputClass(input, 'error');
-    }
+        queue.length = 0;
+        const checks = validatePassword(input.value);
+
+        if (checks.lower === false) {
+            checkQueue(queue, createMessage('password', 'Password must contain at least one lowercase letter.', 'err'));
+        }
+        if (checks.upper === false) {
+            checkQueue(queue, createMessage('password', 'Password must contain at least one uppercase letter.', 'err'));
+        }
+        if (checks.num === false) {
+            checkQueue(queue, createMessage('password', 'Password must contain at least one number.', 'err'));
+        }
+        if (checks.symbol === false) {
+            checkQueue(queue, createMessage('password', 'Password must contain at least one of the allowed symbols.', 'err'));
+        }
+        if (input.validity.valueMissing) {
+            checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+        } else if (!input.validity.valid) {
+            checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+        }
+
+        if (queue.length === 0) {
+            slot.replaceChildren();
+            updateInputClass(input, 'success');
+        } else {
+            updateInputClass(input, 'error');
+        }
+        return;
     }
 
     if (name === 'passwordConfirm') {
-        const pw = document.querySelector('#password-input');
+        queue.length = 0;
+        const pw = document.querySelector('#password-input').value;
+        const match = checkPasswords(pw, input.value);
+        console.log({match, pw, pwc: input.value})
+        if (match === true) {
+            checkQueue(queue, createMessage('passwordConfirm', 'Passwords match.', 'success'));
+            updateInputClass(input, 'success');
+        } else {
+            checkQueue(queue, createMessage('passwordConfirm', 'Passwords do not match.', 'err'));
+            updateInputClass(input, 'error');
+        }
+        if (input.validity.valueMissing) {
+            checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+        } else if (!input.validity.valid) {
+            checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+        }
+
+        return;
     }
 
     if (input.validity.valid && name !== 'country') {
+
+        slot.replaceChildren();
         queue.length = 0;
-        slot.textContent = '';
-        slot.className = 'msg';
         updateInputClass(input, 'success');
     } else if (input.validity.valueMissing && name !== 'country') {
-        if (queue.length) deleteFirstMsg(queue);
+
         const msg = createMessage(name, input.validationMessage, 'err');
-        queue.push(msg);
+        checkQueue(queue, msg);
         updateInputClass(input, 'error');
     }
     else if (!input.validity.valid && name !== 'country'){
-        if (queue.length) deleteFirstMsg(queue);
+
         const msg = createMessage(name, input.validationMessage, 'err');
-        queue.push(msg);
+        checkQueue(queue, msg);
         updateInputClass(input, 'error');
 
     }
     else if (!input.validity.typeMismatch && name !== 'country'){
-        if (queue.length) deleteFirstMsg(queue);
+
         const msg = createMessage(name, input.validationMessage, 'err');
-        queue.push(msg);
+        checkQueue(queue, msg);
         updateInputClass(input, 'error');
     }
+
 }
 
-function displayMessages(messageSlots){
+function displayAllSubmissionMessages(messageSlots){
+
     Object.values(messageQueue).forEach(queue => {
         queue.forEach(msg => {
             const slot = messageSlots[msg.name];
-            slot.textContent = msg.text;
-            slot.classList.add('msg');
-            msg.type === 'err' ? slot.classList.add('invalid') : slot.classList.add('valid');
+            const m = document.createElement('p');
+                m.textContent = msg.text;
+                m.classList.add('msg');
+            slot.appendChild(m);
+
+            msg?.type === 'err' ? m.classList.add('invalid') : m.classList.add('valid');
         });
     });
+}
+
+function displayInputMessages(input, slot) {
+
+    const queue = messageQueue[input.name];
+    slot.replaceChildren();
+
+    if (queue.length > 0){
+        for (const msg of queue){
+            const m = document.createElement('p');
+            m.textContent = msg.text;
+            m.classList.add('msg');
+            slot.appendChild(m);
+            msg?.type === 'err' ? m.classList.add('invalid') : m.classList.add('valid');
+        }
+    }
+
 }
 
 function deleteFirstMsg(msgQueue){
@@ -416,12 +460,12 @@ function setInputListeners(elements){
 
         input.addEventListener('input', () => {
             handleValidation(input, slot);
-            displayMessages(elements.messageSlots);
+            displayInputMessages(input, slot);
         });
 
         input.addEventListener('focusout', () => {
             handleValidation(input, slot);
-            displayMessages(elements.messageSlots);
+            displayInputMessages(input, slot);
         });
     });
 }
@@ -456,21 +500,30 @@ const passwordRequirements = {
 }
 
 function validatePassword(password) {
-    const symbols = passwordRequirements.regex.symbols;
-    const lower = passwordRequirements.regex.lower;
-    const upper = passwordRequirements.regex.upper;
-    const num = passwordRequirements.regex.num;
 
-    console.log(password);
-    /*
-    console.log(symbols);
-    console.log(regex
-
-     */
     return {
         lower: passwordRequirements.regex.lower.test(password),
         upper: passwordRequirements.regex.upper.test(password),
         num: passwordRequirements.regex.num.test(password),
         symbol: passwordRequirements.regex.symbols.test(password)
     }
+}
+
+function checkQueue(queue, msg) {
+    console.log('queue', queue);
+    if (!queue.length) {
+        updateQueue(queue, msg);
+        return;
+    }
+    if (queue.length > 0) {
+        const exists = queue.filter(m => m.text.includes(msg.text))[0];
+        console.log('message found', exists);
+        if (!exists) {
+            updateQueue(queue, msg);
+        }
+    }
+}
+
+function updateQueue(queue, msg) {
+    queue.push(msg);
 }
