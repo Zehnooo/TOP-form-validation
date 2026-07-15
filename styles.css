@@ -237,6 +237,7 @@ form input:hover, form select:hover {
     display: inline-block;
     width: 100%;
     max-width: max-content;
+    z-index: 100;
 }
 
 .password-requirements.active {
