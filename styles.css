@@ -101,6 +101,7 @@ footer p {
 #main {
     width: auto;
     height: auto;
+    min-height: 100vh;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
