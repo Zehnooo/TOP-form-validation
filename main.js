@@ -42,11 +42,11 @@
     elements.labels.password.addEventListener('mouseleave', (e) => {e.target.nextElementSibling.className = 'password-requirements'})
 
     elements.buttons.passwordShow.innerHTML = icons.show;
-    elements.buttons.passwordShow.className = 'show-pw pw secondary';
+    elements.buttons.passwordShow.className = 'show-pw pw';
     elements.buttons.passwordShow.addEventListener( 'click', (e) => togglePasswordText(e, icons) );
 
     elements.buttons.passwordConfirmShow.innerHTML = icons.show;
-    elements.buttons.passwordConfirmShow.className = 'show-pw pw secondary';
+    elements.buttons.passwordConfirmShow.className = 'show-pw pw';
     elements.buttons.passwordConfirmShow.addEventListener( 'click', (e) => togglePasswordText(e, icons) );
 
     elements.form.addEventListener( 'submit', (e) => {
@@ -54,9 +54,8 @@
         if (!elements.form.checkValidity()) {
             Object.values(elements.inputs).forEach(input => {
                 const name = input.name;
-
                 const slot = elements.messageSlots[name];
-                handleValidation(input, slot)
+                handleValidation(input, slot);
             });
             displayAllSubmissionMessages(elements.messageSlots);
             return;
@@ -70,6 +69,7 @@
         }
 
         const data = collectFormSubmission(e);
+        alert(`Congrats, you have now given me all your information! Thank you :) \n\n ${JSON.stringify(data, null, 2)}`)
         console.log(data);
     });
 
@@ -303,12 +303,12 @@ function togglePasswordText(event, icons){
     const btn = event.target;
     const input = btn.previousElementSibling;
     input.type === 'password' ? input.type = 'text' : input.type = 'password';
-    if (btn.className === 'show-pw pw secondary') {
+    if (btn.className === 'show-pw pw') {
         btn.innerHTML = icons.hide;
-        btn.className = 'hide-pw pw secondary';
+        btn.className = 'hide-pw pw';
     } else {
         btn.innerHTML = icons.show;
-        btn.className = 'show-pw pw secondary';
+        btn.className = 'show-pw pw';
     }
 }
 
@@ -363,21 +363,29 @@ function handleValidation(input, slot){
     }
 
     if (name === 'passwordConfirm') {
+        slot.replaceChildren();
         queue.length = 0;
         const pw = document.querySelector('#password-input').value;
-        const match = checkPasswords(pw, input.value);
-        console.log({match, pw, pwc: input.value})
-        if (match === true) {
-            checkQueue(queue, createMessage('passwordConfirm', 'Passwords match.', 'success'));
-            updateInputClass(input, 'success');
-        } else {
-            checkQueue(queue, createMessage('passwordConfirm', 'Passwords do not match.', 'err'));
-            updateInputClass(input, 'error');
+        if (input.validity.valid){
+            slot.replaceChildren();
+            queue.length = 0;
+            const match = checkPasswords(pw, input.value);
+
+            if (match === true) {
+                checkQueue(queue, createMessage('passwordConfirm', 'Passwords match.', 'success'));
+                updateInputClass(input, 'success');
+            } else {
+                checkQueue(queue, createMessage('passwordConfirm', 'Passwords do not match.', 'err'));
+                updateInputClass(input, 'error');
+            }
         }
+
         if (input.validity.valueMissing) {
             checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+            updateInputClass(input, 'error');
         } else if (!input.validity.valid) {
             checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
+            updateInputClass(input, 'error');
         }
 
         return;
@@ -395,14 +403,16 @@ function handleValidation(input, slot){
         updateInputClass(input, 'error');
     }
     else if (!input.validity.valid && name !== 'country'){
-
+        slot.replaceChildren();
+        queue.length = 0;
         const msg = createMessage(name, input.validationMessage, 'err');
         checkQueue(queue, msg);
         updateInputClass(input, 'error');
 
     }
     else if (!input.validity.typeMismatch && name !== 'country'){
-
+        slot.replaceChildren();
+        queue.length = 0;
         const msg = createMessage(name, input.validationMessage, 'err');
         checkQueue(queue, msg);
         updateInputClass(input, 'error');
@@ -415,12 +425,13 @@ function displayAllSubmissionMessages(messageSlots){
     Object.values(messageQueue).forEach(queue => {
         queue.forEach(msg => {
             const slot = messageSlots[msg.name];
-            const m = document.createElement('p');
+            slot.replaceChildren();
+                const m = document.createElement('p');
                 m.textContent = msg.text;
                 m.classList.add('msg');
-            slot.appendChild(m);
+                slot.appendChild(m);
+                msg?.type === 'err' ? m.classList.add('invalid') : m.classList.add('valid');
 
-            msg?.type === 'err' ? m.classList.add('invalid') : m.classList.add('valid');
         });
     });
 }
@@ -510,14 +521,12 @@ function validatePassword(password) {
 }
 
 function checkQueue(queue, msg) {
-    console.log('queue', queue);
     if (!queue.length) {
         updateQueue(queue, msg);
         return;
     }
     if (queue.length > 0) {
         const exists = queue.filter(m => m.text.includes(msg.text))[0];
-        console.log('message found', exists);
         if (!exists) {
             updateQueue(queue, msg);
         }

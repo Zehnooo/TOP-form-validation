@@ -50,9 +50,40 @@ body {
 header, footer {
     width: 100%;
     min-height: 50px;
-    max-height: 100px;
+    max-height: min-content;
     background: var(--bg-alt);
+}
 
+header div {
+    margin: 0 .8rem;
+    justify-content: space-between;
+    display: flex;
+}
+
+header h1 {
+    font-size: 1.5rem;
+}
+
+header figure {
+    max-width: 200px;
+}
+
+header figure svg {
+    width: 100%;
+
+}
+
+header figure svg path {
+    transition: fill 0.3s ease;
+    fill: white;
+}
+
+header figure svg:hover path {
+    fill: var(--btn-p-hov);
+}
+
+header figure a:visited svg {
+    color: white;
 }
 
 footer {
@@ -68,21 +99,23 @@ footer p {
 }
 
 #main {
-    width: 100%;
-    height: 100vh;
+    width: auto;
+    height: auto;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
+    overflow-x: hidden;
 }
 
 #container {
-    width: 100%;
-    height: 100%;
+    width: auto;
+    height: auto;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     margin: 1rem 0;
+    padding: var(--pad-xl);
 }
 
 .greeting {
@@ -98,10 +131,9 @@ footer p {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 25px);
+    height: auto;
     max-width: 650px;
-    max-height: 800px;
     background: var(--bg-alt);
     border-radius: var(--rad-lrg);
     border: 1px solid var(--el-border);
@@ -120,8 +152,7 @@ form {
     width: 100%;
     max-width: 450px;
     gap: .8rem;
-    /* height: 100%; */
-    max-height: 600px;
+    height: 100%;
     justify-content: space-between;
     padding: var(--pad-xl);
 }
@@ -146,8 +177,9 @@ form .pw-group {
 }
 
 form input, form select {
-    max-width: 400px;
+    max-width: 350px;
     width: 100%;
+    margin-right: .8rem;
     padding: var(--pad-med);
     border: 2px solid transparent;
     outline: 2px solid transparent;
@@ -231,17 +263,26 @@ form input:hover, form select:hover {
 .pw {
     justify-content: center;
     align-items: center;
+    max-width: 36px;
+    background: var(--bg);
+    border: 1px solid var(--el-border);
+    transition: background .3s ease, border .3s ease;
+}
+
+.pw:hover {
+    background: var(--bg-alt);
+    border: 1px solid var(--btn-p-hov);
 }
 
 .pw svg {
     pointer-events: none;
-    fill: black;
+    fill: white;
+    width: 100%;
 }
 
 .msg {
     font-family: "Noto Sans Mono", monospace;
     font-optical-sizing: auto;
-    font-weight: 500;
     font-style: normal;
     font-variation-settings:
             "wdth" 100;
@@ -252,7 +293,7 @@ form input:hover, form select:hover {
     border-radius: var(--rad-sml);
     color: var(--text-alt);
     opacity: 0;
-    transition: opacity .2s ease-in;
+    transition: opacity .2s ease;
 }
 
 .msg.invalid {
@@ -266,9 +307,9 @@ form input:hover, form select:hover {
 }
 
 button {
-    border-radius: var(--rad-sml);
+    border-radius: var(--rad-med);
     display: inline-flex;
-    padding: var(--pad-sml);
+    padding: var(--pad-med);
     cursor: pointer;
 }
 
@@ -293,10 +334,10 @@ button.secondary:hover {
 }
 
 button.create {
-    margin: 1rem auto;
     width: 100%;
-    max-width: 200px;
+    max-width: max-content;
     align-items: center;
-    justify-content: center;
-    border-radius: var(--rad-lrg);
+    justify-self: center;
+    align-self: center;
+    padding: var(--pad-lrg);
 }
