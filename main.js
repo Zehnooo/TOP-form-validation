@@ -334,7 +334,7 @@ function handleValidation(input, slot){
     if (name === 'password'){
         queue.length = 0;
         const checks = validatePassword(input.value);
-
+        console.log(checks);
         if (checks.lower === false) {
             checkQueue(queue, createMessage('password', 'Password must contain at least one lowercase letter.', 'err'));
         }
@@ -503,8 +503,8 @@ function checkPasswords(pwA, pwB) {
 
 const passwordRequirements = {
     regex: {
-        lower: /[a-z+]/,
-        upper: /[A-Z+]/,
+        lower: /[a-z]+/,
+        upper: /[A-Z]+/,
         num: /\d/,
         symbols: /[!"#$%&*+,-./:;?@]/,
     },
