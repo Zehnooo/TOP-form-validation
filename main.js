@@ -339,7 +339,7 @@ function handleValidation(input, slot){
             updateInputClass(input, 'error');
         }
         if (input.value.length > input.maxLength){
-            checkQueue(queue, createMessage('password', `Password length over max (${input.minLength}).`, 'err'));
+            checkQueue(queue, createMessage('password', `Password length over max (${input.maxLength}).`, 'err'));
         }
         if (checks.lower === false) {
             checkQueue(queue, createMessage('password', 'Password must contain at least one lowercase letter.', 'err'));
