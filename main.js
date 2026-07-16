@@ -333,7 +333,14 @@ function handleValidation(input, slot){
     if (name === 'password'){
         queue.length = 0;
         const checks = validatePassword(input.value);
-
+        console.log(input.minLength);
+        if (input.value.length < input.minLength){
+            checkQueue(queue, createMessage('password', `Minimum length not met (${input.minLength}).`, 'err'));
+            updateInputClass(input, 'error');
+        }
+        if (input.value.length > input.maxLength){
+            checkQueue(queue, createMessage('password', `Password length over max (${input.minLength}).`, 'err'));
+        }
         if (checks.lower === false) {
             checkQueue(queue, createMessage('password', 'Password must contain at least one lowercase letter.', 'err'));
         }
@@ -348,14 +355,14 @@ function handleValidation(input, slot){
         }
         if (input.validity.valueMissing) {
             checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
-        } else if (!input.validity.valid) {
-            checkQueue(queue, createMessage(name, input.validationMessage, 'err'));
         }
 
         if (queue.length === 0) {
+            input.setCustomValidity('');
             slot.replaceChildren();
             updateInputClass(input, 'success');
         } else {
+            input.setCustomValidity(queue[0].text)
             updateInputClass(input, 'error');
         }
         return;
