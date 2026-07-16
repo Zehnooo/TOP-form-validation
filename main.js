@@ -70,7 +70,6 @@
 
         const data = collectFormSubmission(e);
         alert(`Congrats, you have now given me all your information! Thank you :) \n\n ${JSON.stringify(data, null, 2)}`)
-        console.log(data);
     });
 
     setInputListeners(elements);
@@ -334,7 +333,7 @@ function handleValidation(input, slot){
     if (name === 'password'){
         queue.length = 0;
         const checks = validatePassword(input.value);
-        console.log(checks);
+
         if (checks.lower === false) {
             checkQueue(queue, createMessage('password', 'Password must contain at least one lowercase letter.', 'err'));
         }
